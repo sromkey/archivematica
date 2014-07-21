@@ -18,6 +18,7 @@
 from django.conf.urls import patterns
 
 urlpatterns = patterns('components.api.views',
-    (r'transfer/approve', 'approve_transfer'), 
-    (r'transfer/unapproved', 'unapproved_transfers')
+    (r'transfer/approve', 'approve_transfer'),
+    (r'transfer/unapproved', 'unapproved_transfers'),
+    (r'administration/dips/atom/levels/$', 'get_levels_of_description'),
 )

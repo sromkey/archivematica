@@ -232,3 +232,14 @@ def approve_transfer_via_mcp(directory, type, user_id):
         error = 'Please specify a transfer directory.'
 
     return error
+
+def get_levels_of_description(request):
+    """
+    Returns a JSON-encoded set of the configured levels of description.
+
+    The response is an array of objects containing the UUID and name for
+    each level of description.
+    """
+    levels = models.LevelOfDescription.objects.all().order_by('sortorder')
+    response = [{l.id: l.name} for l in levels]
+    return helpers.json_response(response)
