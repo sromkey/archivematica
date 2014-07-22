@@ -75,9 +75,10 @@ def keynat(string):
             r.append(c.lower())
     return r
 
-def json_response(data):
+def json_response(data, status_code=200):
     return HttpResponse(
         json.dumps(data),
+        status=status_code,
         mimetype='application/json'
     )
 
