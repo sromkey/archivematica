@@ -827,7 +827,7 @@ def build_arranged_structmap(original_structmap):
         div = structmap.find('.//mets:div[@LABEL="{}"]'.format(label), namespaces=ns.NSMAP)
         objects.remove(div)
 
-    for element in structmap.iterdescendants():
+    for element in root_div.iterdescendants():
         if not element.tag == "{}div".format(ns.metsBNS):
             continue
 
