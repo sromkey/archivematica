@@ -832,12 +832,13 @@ def build_arranged_structmap(original_structmap):
             continue
 
         path = [element.attrib['LABEL']]
-        parent = element.getparent()
-        path.insert(0, parent.attrib['LABEL'])
-
-        while parent.attrib['LABEL'] != 'objects':
-            parent = parent.getparent()
+        if path != ['objects']:
+            parent = element.getparent()
             path.insert(0, parent.attrib['LABEL'])
+
+            while parent.attrib['LABEL'] != 'objects':
+                parent = parent.getparent()
+                path.insert(0, parent.attrib['LABEL'])
 
         relative_location = os.path.join(*path)
 
