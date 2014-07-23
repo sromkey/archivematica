@@ -16,10 +16,12 @@
 # along with Archivematica.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.conf.urls import patterns
+from django.conf import settings
 
 urlpatterns = patterns('components.api.views',
     (r'transfer/approve', 'approve_transfer'),
     (r'transfer/unapproved', 'unapproved_transfers'),
     (r'administration/dips/atom/levels/$', 'get_levels_of_description'),
     (r'administration/dips/atom/fetch_levels/$', 'fetch_levels_of_description_from_atom'),
+    (r'filesystem/metadata/(?P<sip_uuid>' + settings.UUID_REGEX + ')/$', 'add_sip_hierarchy'),
 )
