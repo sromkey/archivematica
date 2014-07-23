@@ -817,6 +817,15 @@ def build_arranged_structmap(original_structmap):
     structmap.attrib['TYPE'] = 'logical'
     structmap.attrib['LABEL'] = 'Hierarchical'
     structmap.attrib['ID'] = "structMap_{}".format(uuid4())
+    root_div = structmap.find('./mets:div', namespaces=ns.NSMAP)
+    objects = root_div.find('./mets:div[@LABEL="objects"]', namespaces=ns.NSMAP)
+
+    # The contents of submissionDocumentation and metadata do
+    # not have intellectual arrangement, so don't need to be
+    # represented in this structMap.
+    for label in ('submissionDocumentation', 'metadata'):
+        div = structmap.find('.//mets:div[@LABEL="{}"]'.format(label), namespaces=ns.NSMAP)
+        objects.remove(div)
 
     for element in structmap.iterdescendants():
         if not element.tag == "{}div".format(ns.metsBNS):
