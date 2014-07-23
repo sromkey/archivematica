@@ -807,7 +807,7 @@ def createFileSec(directoryPath, parentDiv):
     return structMapDiv
 
 def build_arranged_structmap(original_structmap):
-    sql = """SELECT relative_location, level_of_description FROM LevelsOfDescription
+    sql = """SELECT relative_location, level_of_description FROM main_filelevelofdescription
         WHERE sipUUID = '{}'""".format(fileGroupIdentifier)
     tag_dict = dict(databaseInterface.queryAllSQL(sql))
     if len(tag_dict) < 1:
