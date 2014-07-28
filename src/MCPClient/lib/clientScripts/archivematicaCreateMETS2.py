@@ -842,7 +842,14 @@ def build_arranged_structmap(original_structmap):
 
         relative_location = os.path.join(*path)
 
-        element.attrib['TYPE'] = tag_dict.get(relative_location)
+        # Certain items won't have a level of description;
+        # they should be retained in the tree, but have
+        # no TYPE attribute.
+        tag = tag_dict.get(relative_location)
+        if tag:
+            element.attrib['TYPE'] = tag
+        else:
+            del element.attrib['TYPE']
 
     return structmap
 
