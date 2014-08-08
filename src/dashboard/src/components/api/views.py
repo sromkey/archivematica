@@ -281,16 +281,15 @@ def path_metadata(request):
     # Determine path being requested/updated
     path = request.GET.get('path', '') if request.method == 'GET' else request.POST.get('path', '')
 
-    arrange_dir = '/arrange/'
-    if path.startswith(arrange_dir):
-        path = path[len(arrange_dir):]
-
     # Get current metadata, if any
-    file_lod = get_object_or_None(models.FileLevelOfDescription, relative_location=path, sip__isnull=True)
+    file_lod = get_object_or_None(models.SIPArrange, arrange_path=path, sip_created=False)
+    if file_lod is None:
+        # Try with trailing / to see if it's a directory
+        file_lod = get_object_or_None(models.SIPArrange, arrange_path=path+'/', sip_created=False)
 
     # Return current metadata, if requested
     if request.method == 'GET':
-        level_of_description = file_lod.level_of_description if file_lod != None else ''
+        level_of_description = file_lod.level_of_description if file_lod is not None else ''
 
         return helpers.json_response({
             "level_of_description": level_of_description
@@ -303,10 +302,6 @@ def path_metadata(request):
         level_of_description = get_object_or_None(models.LevelOfDescription, id=level_of_description_id)
 
         # add or update file LOD
-        if file_lod == None:
-            file_lod = models.FileLevelOfDescription()
-
-        file_lod.relative_location = path
         file_lod.level_of_description = level_of_description.name
         file_lod.save()
 

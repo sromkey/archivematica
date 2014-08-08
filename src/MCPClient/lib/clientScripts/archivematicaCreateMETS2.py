@@ -807,8 +807,8 @@ def createFileSec(directoryPath, parentDiv):
     return structMapDiv
 
 def build_arranged_structmap(original_structmap):
-    sql = """SELECT relative_location, level_of_description FROM main_filelevelofdescription
-        WHERE sipUUID = '{}'""".format(fileGroupIdentifier)
+    sql = """SELECT arrange_path, level_of_description FROM main_siparrange
+        WHERE sip_id = '{}'""".format(fileGroupIdentifier)
     tag_dict = dict(databaseInterface.queryAllSQL(sql))
     if len(tag_dict) < 1:
         return
@@ -827,19 +827,16 @@ def build_arranged_structmap(original_structmap):
         div = structmap.find('.//mets:div[@LABEL="{}"]'.format(label), namespaces=ns.NSMAP)
         objects.remove(div)
 
-    for element in root_div.iterdescendants():
-        if not element.tag == "{}div".format(ns.metsBNS):
+    for element in objects.iterdescendants():
+        if element.tag != ns.metsBNS + "div":
             continue
 
+        # Build the full path relative to objects dir
         path = [element.attrib['LABEL']]
-        if path != ['objects']:
-            parent = element.getparent()
+        parent = element.getparent()
+        while parent != objects:
             path.insert(0, parent.attrib['LABEL'])
-
-            while parent.attrib['LABEL'] != 'objects':
-                parent = parent.getparent()
-                path.insert(0, parent.attrib['LABEL'])
-
+            parent = parent.getparent()
         relative_location = os.path.join(*path)
 
         # Certain items won't have a level of description;
@@ -847,6 +844,7 @@ def build_arranged_structmap(original_structmap):
         # no TYPE attribute.
         tag = tag_dict.get(relative_location)
         if tag:
+            print 'Adding TYPE=%s for logical structMap element %s' % (tag, relative_location)
             element.attrib['TYPE'] = tag
         else:
             del element.attrib['TYPE']
