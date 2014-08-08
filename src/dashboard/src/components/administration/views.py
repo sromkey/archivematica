@@ -94,15 +94,16 @@ def atom_dips(request):
                        'dip_upload_atom_password', 'dip_upload_atom_rsync_target',
                        'dip_upload_atom_rsync_command', 'dip_upload_atom_version']
         for field in char_fields:
-            try:
-                value = form.cleaned_data[field]
-            except KeyError:
+            value = form.cleaned_data.get(field)
+            if not value:
                 continue
             optname = field.replace('dip_upload_atom_', '').replace('_', '-')
             opts.append('--{}={}'.format(optname, value))
         if form.cleaned_data['dip_upload_atom_debug'] == 'True':
             opts.append('--debug')
-        arguments = ' \\\n'.join(opts)
+        # Add file UUID
+        opts.append('--uuid="%SIPUUID%"')
+        arguments = ' '.join(opts)
         upload_setting.arguments = arguments
         upload_setting.save()
 
