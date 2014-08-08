@@ -818,6 +818,7 @@ def build_arranged_structmap(original_structmap):
     structmap.attrib['LABEL'] = 'Hierarchical'
     structmap.attrib['ID'] = "structMap_{}".format(uuid4())
     root_div = structmap.find('./mets:div', namespaces=ns.NSMAP)
+    del root_div.attrib['TYPE']
     objects = root_div.find('./mets:div[@LABEL="objects"]', namespaces=ns.NSMAP)
 
     # The contents of submissionDocumentation and metadata do
@@ -826,6 +827,14 @@ def build_arranged_structmap(original_structmap):
     for label in ('submissionDocumentation', 'metadata'):
         div = structmap.find('.//mets:div[@LABEL="{}"]'.format(label), namespaces=ns.NSMAP)
         objects.remove(div)
+
+    # Handle objects level of description separately, since tag paths are relative to objects
+    tag = tag_dict.get('.')
+    if tag:
+        print 'Adding TYPE=%s for logical structMap element objects' % tag
+        objects.attrib['TYPE'] = tag
+    else:
+        del objects.attrib['TYPE']
 
     for element in objects.iterdescendants():
         if element.tag != ns.metsBNS + "div":
