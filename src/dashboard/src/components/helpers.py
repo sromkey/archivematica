@@ -292,12 +292,13 @@ def get_atom_levels_of_description(clear=True):
     dest = urljoin(url, 'api/taxonomies/34')
     response = requests.get(dest, params={'culture': 'en'}, auth=auth)
     if response.status_code == 200:
+        base = 1
         if clear:
             models.LevelOfDescription.objects.all().delete()
 
         levels = response.json()
-        for level in levels:
-            lod = models.LevelOfDescription(name=level['name'])
+        for idx, level in enumerate(levels):
+            lod = models.LevelOfDescription(name=level['name'], sortorder=base + idx)
             lod.save()
     else:
         raise Exception("Unable to fetch levels of description from AtoM!")
