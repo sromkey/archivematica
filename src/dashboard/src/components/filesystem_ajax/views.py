@@ -86,12 +86,13 @@ def arrange_contents(request):
     # Query SIP Arrangement for results
     # Get all the paths that are not in SIPs and start with base_path.  We don't
     # need the objects, just the arrange_path
-    paths = models.SIPArrange.objects.filter(sip_created=False).filter(aip_created=False).filter(arrange_path__startswith=base_path).order_by('arrange_path').values_list('arrange_path', flat=True)
+    paths = models.SIPArrange.objects.filter(sip_created=False).filter(aip_created=False).filter(arrange_path__startswith=base_path).order_by('arrange_path')
 
     # Convert the response into an entries [] and directories []
     # 'entries' contains everything (files and directories)
-    response = {'entries': [], 'directories': []}
-    for path in paths:
+    response = {'entries': [], 'directories': [], 'properties': {}}
+    for item in paths:
+        path = item.arrange_path
         # Stip common prefix
         if path.startswith(base_path):
             path = path[len(base_path):]
@@ -102,6 +103,10 @@ def arrange_contents(request):
             response['entries'].append(entry)
             if path.endswith('/'):  # path is a dir
                 response['directories'].append(entry)
+
+                # Specificy level of description if set
+                if item.level_of_description != '':
+                    response['properties'][entry] = {'levelOfDescription': item.level_of_description}
 
     return helpers.json_response(response)
 
