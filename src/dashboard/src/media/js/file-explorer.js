@@ -477,11 +477,12 @@
                 success: function(results) {
                   for(var index in results.entries) {
                     var entryName = results.entries[index],
-                        entryProperties = results.properties[entryName],
+                        entryProperties,
                         entryOptions = {'name': entryName};
 
                     // allow optional entry properties to be relayed (metadata, etc.)
-                    if (typeof entryProperties != 'undefined') {
+                    if (typeof results.properties !== 'undefined') {
+                      entryProperties = results.properties[entryName];
                       entryOptions['properties'] = entryProperties;
                     }
 
