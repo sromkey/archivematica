@@ -302,7 +302,7 @@ def path_metadata(request):
         level_of_description = get_object_or_None(models.LevelOfDescription, id=level_of_description_id)
 
         # add or update file LOD
-        file_lod.level_of_description = level_of_description.name
+        file_lod.level_of_description = level_of_description.name if level_of_description != None else ''
         file_lod.save()
 
         body = {
