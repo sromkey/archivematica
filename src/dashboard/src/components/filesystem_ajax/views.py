@@ -104,9 +104,9 @@ def arrange_contents(request):
             if path.endswith('/'):  # path is a dir
                 response['directories'].append(entry)
 
-                # Specificy level of description if set
-                if item.level_of_description != '':
-                    response['properties'][entry] = {'levelOfDescription': item.level_of_description}
+            # Specificy level of description if set
+            if item.level_of_description != '':
+                response['properties'][entry] = {'levelOfDescription': item.level_of_description}
 
     return helpers.json_response(response)
 
