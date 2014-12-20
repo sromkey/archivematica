@@ -37,6 +37,7 @@ from elasticsearch import Elasticsearch, ConnectionError, TransportError
 
 sys.path.append("/usr/lib/archivematica/archivematicaCommon")
 import databaseInterface
+import storageService as storage_service
 import version
 
 sys.path.append("/usr/lib/archivematica/archivematicaCommon/externals")
@@ -654,6 +655,17 @@ def index_transfer_files(conn, uuid, pathToTransfer, index, type):
 
                 wait_for_cluster_yellow_status(conn)
                 try_to_index(conn, indexData, index, type)
+
+                # HACK: remove this after storage service is able to parse
+                #       the transfer METS, instead of needing to be fed info
+                storage_service.index_package_file(uuid, {
+                    'source_id': file_uuid,
+                    'name': relative_path,
+                    'source_package': uuid,
+                    'checksum': '',
+                    'accessionid': accession_id,
+                    'origin': dashboard_uuid
+                })
 
                 filesIndexed = filesIndexed + 1
             else:
