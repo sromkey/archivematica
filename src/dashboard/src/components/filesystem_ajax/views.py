@@ -95,6 +95,13 @@ def arrange_contents(request):
     response = {'entries': [], 'directories': [], 'properties': {}}
     for item in paths:
         path = item.arrange_path
+        is_dir = path.endswith('/')
+
+        # Directory names are sanitized; for display, show the
+        # original path rather than the sanitized name
+        if is_dir:
+            path = item.original_path
+
         # Stip common prefix
         if path.startswith(base_path):
             path = path[len(base_path):]
@@ -103,7 +110,7 @@ def arrange_contents(request):
         # Only insert once
         if entry and entry not in response['entries']:
             response['entries'].append(entry)
-            if path.endswith('/'):  # path is a dir
+            if is_dir:
                 response['directories'].append(entry)
 
             # Specificy level of description if set
