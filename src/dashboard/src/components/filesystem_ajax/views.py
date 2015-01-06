@@ -33,6 +33,8 @@ from components import helpers
 import components.filesystem_ajax.helpers as filesystem_ajax_helpers
 from main import models
 
+from unidecode import unidecode
+
 sys.path.append("/usr/lib/archivematica/archivematicaCommon")
 import archivematicaFunctions
 import databaseFunctions
@@ -402,10 +404,31 @@ def create_directory_within_arrange(request):
     path = base64.b64decode(request.POST.get('path', ''))
 
     if path:
+        path = os.path.join(path, '')  # ensure ends with /
+
+        # Record a sanitized copy as the arrange_path, and the original string
+        # as the original_path. This allows Unicode names to be used in a
+        # logical structMap without needing to actually store
+        # Unicode paths on disk.
+        # If no logical structMap is created in the final METS, the original
+        # pathname is unused.
+
+        # Depending on the contents of the string, the browser may send
+        # this string encoded as ISO-8859-1 or UTF-8.
+        try:
+            try:
+                path = path.decode('utf-8')
+            except UnicodeDecodeError:
+                path = path.decode('iso-8859-1')
+        except UnicodeDecodeError:
+            pass
+
+        sanitized_path = unidecode(path)
+
         if path.startswith(DEFAULT_ARRANGE_PATH):
             models.SIPArrange.objects.create(
-                original_path=None,
-                arrange_path=os.path.join(path, ''), # ensure ends with /
+                original_path=path,
+                arrange_path=sanitized_path,
                 file_uuid=None,
             )
         else:
