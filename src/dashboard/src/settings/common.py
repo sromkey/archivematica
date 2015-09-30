@@ -97,6 +97,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    ('appraisal', os.path.join(BASE_PATH, 'media', 'appraisal')),
     ('js', os.path.join(BASE_PATH, 'media', 'js')),
     ('css', os.path.join(BASE_PATH, 'media', 'css')),
     ('images', os.path.join(BASE_PATH, 'media', 'images')),
@@ -150,6 +151,7 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(BASE_PATH, 'templates'),
+    os.path.join(BASE_PATH, 'media', 'appraisal'),
 )
 
 INSTALLED_APPS = (

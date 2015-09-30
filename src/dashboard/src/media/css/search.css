@@ -134,3 +134,7 @@ td.size {
 .advanced_search_form_row_multiple > .advanced_search_form_field_op {
   width: 90px;
 }
+
+#search_form {
+  padding: 20px;
+}
