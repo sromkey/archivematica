@@ -11,7 +11,7 @@ elasticsearch>=1.0.0,<2.0.0
 lazy-paged-sequence
 git+git://github.com/artefactual-labs/agentarchives.git
 # Required by storage-service component
-slumber==0.6.0
+slumber
 pytz
 pyopenssl
 ndg-httpsclient
