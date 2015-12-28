@@ -3,70 +3,15 @@
 {% block title %}Appraisal Tab{% endblock %}
 {% block h1 %}Ingest{% endblock %}
 
-{% block extra_css %}
-  <link rel="stylesheet" href="{{ STATIC_URL }}appraisal/bower_components/bootstrap/dist/css/bootstrap.css">
-  <link rel="stylesheet" href="{{ STATIC_URL }}appraisal/bower_components/fontawesome/css/font-awesome.min.css">
-  <link rel="stylesheet" href="{{ STATIC_URL }}appraisal/vendor/angular-tree-control/css/tree-control.css">
-  <link rel="stylesheet" href="{{ STATIC_URL }}appraisal/vendor/angular-tree-control/css/tree-control-attribute.css">
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/directory_picker.css">
-  <link rel="stylesheet" href="{{ STATIC_URL }}appraisal/css/file-explorer.css">
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/search.css">
-  <link rel="stylesheet" href="{{ STATIC_URL }}appraisal/app.css">
-{% endblock %}
-
 {% block js %}
 <base href='{{ STATIC_URL }}appraisal/'>
 {% endblock %}
 
 {% block extra_js %}
-  <script src="{{ STATIC_URL }}appraisal/bower_components/lodash/dist/lodash.min.js"></script>
+  <script src="{{ STATIC_URL }}vendor/underscore.js"></script>
   <script src="{{ STATIC_URL }}vendor/backbone.js"></script>
   <script src="{{ STATIC_URL }}js/advanced-search-query-creator.js"></script>
   <script src="{{ STATIC_URL }}js/ingest/backlog.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/vendor/base64.js"></script>
-  <!-- In production use:
-  <script src="{{ STATIC_URL }}appraisal///ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
-  -->
-  <script src="{{ STATIC_URL }}appraisal/bower_components/angular/angular.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/bower_components/angular-route/angular-route.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/bower_components/angular-route-segment/build/angular-route-segment.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/bower_components/d3/d3.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/bower_components/jquery/dist/jquery.min.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/bower_components/jqueryui/jquery-ui.min.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/bower_components/restangular/dist/restangular.min.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/bower_components/angular-charts/dist/angular-charts.min.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/vendor/angular-tree-control/angular-tree-control.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/vendor/angular-ui-bootstrap/ui-bootstrap-custom-tpls-0.13.4.min.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/app.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/ui/ui.directive.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/checklist/checklist.directive.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/tree/tree.directive.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/services/alert.service.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/services/archivesspace.service.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/services/facet.service.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/services/file.service.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/services/file_list.service.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/services/selected.service.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/services/sip_arrange.service.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/services/tag.service.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/services/transfer.service.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/filters/aggregation.filter.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/filters/facet.filter.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/alert/alert.controller.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/archivesspace/archivesspace.controller.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/analysis/analysis.controller.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/arrangement/arrangement.controller.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/examine_contents/examine_contents.controller.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/facet_selector/facet_selector.controller.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/file_list/file_list.controller.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/preview/preview.controller.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/search/search.controller.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/tree/tree.controller.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/report/report.controller.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/visualizations/visualizations.controller.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/components/version/version.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/components/version/version-directive.js"></script>
-  <script src="{{ STATIC_URL }}appraisal/components/version/interpolate-filter.js"></script>
 {% endblock extra_js %}
 
 {% block content %}
