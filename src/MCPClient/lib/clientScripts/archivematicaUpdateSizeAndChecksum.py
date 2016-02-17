@@ -21,6 +21,7 @@ import argparse
 import os
 import re
 import sys
+import uuid
 
 # fileOperations requires Django to be set up
 import django
@@ -66,7 +67,7 @@ def get_size_and_checksum_from_mets(shared_path, file_):
     logger.info('Archivematica AIP: reading METS file %s.', mets_file)
     mets = metsrw.METSDocument.fromfile(mets_file)
 
-    fsentry = mets.get_file(file_.uuid)
+    fsentry = mets.get_file(file_uuid=file_.uuid)
     if not fsentry:
         logger.error('Archivematica AIP: FSEntry with UUID %s not found', file_.uuid)
         return None

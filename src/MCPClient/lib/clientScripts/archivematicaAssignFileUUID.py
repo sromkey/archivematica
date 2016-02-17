@@ -68,14 +68,16 @@ def get_file_uuid_from_mets(sip_directory, file_path_relative_to_sip):
     # Warning! This is not the fastest way to achieve this. But we will focus
     # on optimizations later.
     # TODO: is it ok to assume that the file structure is flat?
-    for entry in mets.all_files():
-        if entry.path == file_path_relative_to_sip:
-            logger.info('Archivematica AIP: file UUID of has been found in the METS document (%s).', entry.path)
-            return entry.file_uuid
+    entry = mets.get_file(path=file_path_relative_to_sip)
+    if entry:
+        logger.info('Archivematica AIP: file UUID of has been found in the METS document (%s).', entry.path)
+        return entry.file_uuid
     logger.info('Archivematica AIP: file UUID has not been found in the METS document: %s', file_path_relative_to_sip)
 
 
 def main(file_uuid=None, file_path='', date='', event_uuid=None, sip_directory='', sip_uuid=None, transfer_uuid=None, use='original', update_use=True):
+    if file_uuid == "None":
+        file_uuid = None
     if file_uuid:
         logger.error('File already has UUID: %s', file_uuid)
         if update_use:
@@ -109,7 +111,7 @@ def main(file_uuid=None, file_path='', date='', event_uuid=None, sip_directory='
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-i', '--fileUUID', type=lambda x: str(uuid.UUID(x)), dest='file_uuid')
+    parser.add_argument('-i', '--fileUUID', type=str, dest='file_uuid')
     parser.add_argument('-p', '--filePath', action='store', dest='file_path', default='')
     parser.add_argument('-d', '--date', action='store', dest='date', default='')
     parser.add_argument('-u', '--eventIdentifierUUID', type=lambda x: str(uuid.UUID(x)), dest='event_uuid')
