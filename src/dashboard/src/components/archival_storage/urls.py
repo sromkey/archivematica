@@ -15,11 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Archivematica.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.conf.urls import url, patterns
+from django.conf.urls import url
 from django.conf import settings
 from components.archival_storage import views
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'search/json/file/(?P<document_id_modified>\w+)/$', views.file_json),
     url(r'search/json/aip/(?P<document_id_modified>\w+)/$', views.aip_json),
     url(r'search/create_aic/$', views.create_aic,
@@ -36,4 +36,4 @@ urlpatterns = patterns('',
     url(r'thumbnail/(?P<fileuuid>' + settings.UUID_REGEX + ')/$', views.send_thumbnail),
     url(r'^$', views.overview,
         name='archival_storage_index')
-)
+]
