@@ -120,6 +120,8 @@ function setupBacklogBrowser() {
   }
 
   function moveHandler(move) {
+    console.log('move handler');
+    console.dir(move);
     // don't allow moving anything into the originals directory
     if (move.self.id == 'originals') {
       move.self.alert('Error', "You can't copy into the originals directory.");
@@ -227,15 +229,6 @@ function setupBacklogBrowser() {
   arrange.moveHandler = moveHandler;
   arrange.render();
   enableOrDisableArrangePanelActionButtons(arrange);
-
-  // search results widget
-  var originals_search_results = new fileBrowser.EntryList({
-    el: $('#originals_search_results'),
-    moveHandler: moveHandler,
-    levelTemplate: $('#template-dir-level').html(),
-    entryTemplate: $('#template-dir-entry').html(),
-    itemsPerPage: 20
-  });
 
   return {
     'originals': originals,

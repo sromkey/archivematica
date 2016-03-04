@@ -644,7 +644,7 @@
     // default drop handling logic for the entry list
     // (returns element to its original position)
     dropHandler: function(event) {
-      var droppedId   = event.dragTarget.id;
+      var droppedId   = event.currentTarget.id;
 
       $('#' + droppedId).css({left: 0});
       $('#' + droppedId).css({top: 0});
@@ -655,18 +655,18 @@
       if (this.moveHandler) {
         // bind drag-and-drop functionality
         var self = this;
-
+        console.log('init '+ self.id);
         // bind all list entries to drag handler
         $(this.el)
           .find('.backbone-file-explorer-entry:not(.not_draggable)')
           .unbind('drag')
-          .bind('drag', {'self': self}, self.dragHandler);
+          .bind('drag', {'self': self, 'EntryList': 'drag', 'id': self.id}, self.dragHandler);
 
         // bind all list entries to drop handler
         $(this.el)
           .find('.backbone-file-explorer-entry')
           .unbind('drop')
-          .bind('drop', {'self': self}, self.dropHandler);
+          .bind('drop', {'self': self, 'EntryList': 'drop', 'id': self.id}, self.dropHandler);
       }
     },
 
@@ -799,13 +799,13 @@
        $(this.el)
           .find('.backbone-file-explorer-entry:not(:first):not(.not_draggable)')
           .unbind('drag')
-          .bind('drag', {'self': self}, self.dragHandler);
+          .bind('drag', {'self': self, 'FileExplorer': 'drag'}, self.dragHandler);
 
        // allow top-level directory to be dragged into
        $(this.el)
           .find('.backbone-file-explorer-entry')
           .unbind('drop')
-          .bind('drop', {'self': self}, self.dropHandler);
+          .bind('drop', {'self': self, 'FileExplorer': 'drop'}, self.dropHandler);
       }
     },
 
@@ -925,11 +925,17 @@
 
     // logic to keep handle dropping a directory entry
     dropHandler: function(event) {
-      var droppedId   = event.dragTarget.id;
-      var containerId = event.dropTarget.id;
+      var droppedId   = event.currentTarget.id;
+      var containerId = event.target.id;
       var self = event.data.self;
+      console.log('drop event');
+      console.dir(event);
 
       if (droppedId != containerId) {
+        // FIXME self used to be the destination tab, now it's the source tab
+        // FIXME when dragging landing element is often not the one with an ID (gets directory_entry_name/icon_button/entry_actions instead of parent backbone-file-explorer-entry)
+        console.log('droppedId:' + droppedId + '; containerId:' + containerId + ';');
+        console.dir(exports.Data.idPaths);
         var droppedPath = exports.Data.idPaths[droppedId];
         var containerPath = exports.Data.idPaths[containerId];
         var moveAllowed = containerPath.indexOf(droppedPath) != 0;
