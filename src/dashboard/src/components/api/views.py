@@ -436,7 +436,7 @@ def reingest(request, target):
     :param str target: ingest or transfer
     """
     if request.method != 'POST':
-         return django.http.HttpResponseNotAllowed(permitted_methods=['POST'])
+        return django.http.HttpResponseNotAllowed(permitted_methods=['POST'])
     error = authenticate_request(request)
     if error:
         response = {'error': True, 'message': error}
@@ -479,7 +479,7 @@ def reingest(request, target):
         transfer = models.Transfer.objects.create(**tdetails)
         LOGGER.info('Transfer saved in the database (uuid=%s, type=%s, location=%s)', tdetails['uuid'], tdetails['type'], tdetails['currentlocation'])
 
-    elif transfer == 'ingest':
+    elif target == 'ingest':
         dest = os.path.join(shared_directory_path, 'watchedDirectories', 'system', 'reingestAIP', '')
 
     # Move to watched directory
