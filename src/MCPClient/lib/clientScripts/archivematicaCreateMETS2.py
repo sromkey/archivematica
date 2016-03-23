@@ -677,6 +677,10 @@ def createFileSec(directoryPath, parentDiv, baseDirectoryPath, baseDirectoryName
                 print >>sys.stderr, "No uuid for file: \"", directoryPathSTR, "\""
                 sharedVariablesAcrossModules.globalErrorCount += 1
                 continue
+            except File.MultipleObjectsReturned:
+                print >>sys.stderr, "Multiple files returned for query", kwargs
+                sharedVariablesAcrossModules.globalErrorCount += 1
+                continue
 
             use = f.filegrpuse
             label = f.label
