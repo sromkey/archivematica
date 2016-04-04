@@ -97,10 +97,11 @@ def restructure_transfer_aip(unit_path):
     # Move /old_bag/data/objects/metadata/* => /metadata/
     src = os.path.join(old_bag, 'data', 'objects', 'metadata')
     dst = os.path.join(unit_path, 'metadata')
-    for item in os.listdir(src):
-        item_path = os.path.join(src, item)
-        _move_file(item_path, dst)
-    shutil.rmtree(src)
+    if os.path.isdir(src):
+        for item in os.listdir(src):
+            item_path = os.path.join(src, item)
+            _move_file(item_path, dst)
+        shutil.rmtree(src)
 
     # Move /old_bag/data/objects/submissionDocumentation/* => /metadata/submissionDocumentation/
     src = os.path.join(old_bag, 'data', 'objects', 'submissionDocumentation')
