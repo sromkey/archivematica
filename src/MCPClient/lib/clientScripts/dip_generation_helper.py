@@ -4,12 +4,14 @@ import argparse
 import ast
 import csv
 import sys
+import logging
 
 # dashboard
 from django.db.models import Q
 from main import models
 
 # archivematicaCommon
+from custom_handlers import get_script_logger
 import archivematicaFunctions
 
 # Third party dependencies, alphabetical by import source
@@ -18,6 +20,7 @@ from agentarchives import archivesspace
 # initialize Django (required for Django 1.7)
 import django
 django.setup()
+
 
 def create_archivesspace_client():
     """
@@ -36,9 +39,11 @@ def create_archivesspace_client():
             repository=config['%repository%']
         )
     except archivesspace.AuthenticationError:
+        logging.error('Unable to authenticate to ArchivesSpace server using the default user! Check administrative settings.')
         print("Unable to authenticate to ArchivesSpace server using the default user! Check administrative settings.")
         return None
     except archivesspace.ConnectionError:
+        logging.error('Unable to connect to ArchivesSpace server at the default location! Check administrative settings.')
         print("Unable to connect to ArchivesSpace server at the default location! Check administrative settings.")
         return None
     return client
@@ -72,11 +77,13 @@ def parse_archivesspace_ids(sip_path, sip_uuid):
     # Check for archivesspaceids.csv
     csv_paths = archivematicaFunctions.find_metadata_files(sip_path, 'archivesspaceids.csv')
     if not csv_paths:
+        logging.info('No archivesspaceids.csv files found, exiting')
         print('No archivesspaceids.csv files found, exiting')
         return 0
 
     file_info = parse_archivesspaceids_csv(csv_paths)
     if not file_info:
+        logging.info('No information found in archivesspaceids.csv files')
         print('No information found in archivesspaceids.csv files')
         return 1
     print(file_info)
@@ -88,6 +95,7 @@ def parse_archivesspace_ids(sip_path, sip_uuid):
 
     for filename, ref_id in file_info.items():
         # Get file object (for fileUUID, to see if in DIP)
+        logging.debug(filename, ref_id, '%SIPLocation%' + filename)
         print(filename, ref_id, '%SIPLocation%' + filename)
         try:
 
@@ -99,11 +107,14 @@ def parse_archivesspace_ids(sip_path, sip_uuid):
                 sip_id=sip_uuid
             )
         except models.File.DoesNotExist:
+            logging.error(filename, 'not found in database, skipping')
             print(filename, 'not found in database, skipping')
             continue
         except models.File.MultipleObjectsReturned:
+            logging.error('Multiple entries for', filename, 'found in database, skipping')
             print('Multiple entries for', filename, 'found in database, skipping')
             continue
+        logging.debug('File:', f)
         print('File:', f)
 
         # Query ref_id to client for resource_id
@@ -111,9 +122,12 @@ def parse_archivesspace_ids(sip_path, sip_uuid):
         try:
             resource_id = resource[0]['id']
         except IndexError:
+            logging.error('ArchivesSpace did not return an ID for', ref_id)
+            logging.error('Returned', resource)
             print('ArchivesSpace did not return an ID for', ref_id)
             print('Returned', resource)
             continue
+        logging.debug('Resource ID:', resource_id)
         print('Resource ID:', resource_id)
 
         # Add to ArchivesSpaceDIPObjectResourcePairing
@@ -127,6 +141,8 @@ def parse_archivesspace_ids(sip_path, sip_uuid):
     return 0
 
 if __name__ == '__main__':
+    logger = get_script_logger("archivematica.mcp.client.dipGenerationHelper")
+
     parser = argparse.ArgumentParser(description='Parse metadata for DIP helpers')
     parser.add_argument('--sipUUID', required=True, help='%SIPUUID%')
     parser.add_argument('--sipPath', required=True, help='%SIPDirectory%')
