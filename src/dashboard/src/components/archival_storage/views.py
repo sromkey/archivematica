@@ -344,7 +344,7 @@ def reingest_aip(request, package_uuid):
     if form.is_valid():
         # POST to SS for reingest
         response = storage_service.request_reingest(
-            package_uuid, form.cleaned_data['reingest_type'])
+            package_uuid, form.cleaned_data['reingest_type'], form.cleaned_data['processing_config'])
         error = response.get('error', True)
         message = response.get('message', 'An unknown error occurred.')
         if error:
